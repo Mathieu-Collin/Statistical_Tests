@@ -413,17 +413,22 @@ class HospitalStatistics:
         -------
         AnalysisResult
             Complete analysis results.
+
+        Notes
+        -----
+        Automatically performs:
+        1. Shapiro-Wilk normality tests on both datasets
+        2. Selection of appropriate comparison test
+        3. Execution of comparison test (t-test or Wilcoxon)
         """
-        # Normality tests
         shapiro_1 = self.shapiro_wilk_test(data1)
         shapiro_2 = self.shapiro_wilk_test(data2)
         
-        # Choose appropriate comparison test
         if shapiro_1.is_normal and shapiro_2.is_normal:
-            test_type = 't-test'
+            test_type: Literal['t-test', 'wilcoxon'] = 't-test'
             test_result = self.t_test(data1, data2)
         else:
-            test_type = 'wilcoxon'
+            test_type: Literal['t-test', 'wilcoxon'] = 'wilcoxon'
             test_result = self.wilcoxon_test(data1, data2)
         
         return AnalysisResult(
@@ -612,19 +617,22 @@ def analyze_dataframes(
 # ============================================================================
 
 def main():
-    """Standalone execution example."""
+    """Standalone execution example.
+
+    Notes
+    -----
+    Demonstrates basic usage of the module when run as a script.
+    Generates synthetic data, performs analysis, displays results,
+    and saves to file.
+    """
     print("Running hospital statistical analysis...\n")
     
-    # Create analyzer
     stats = HospitalStatistics()
     
-    # Run analysis with synthetic data
     result = stats.run_analysis(n_rows=50, random_state=42)
     
-    # Display results
     print(result.get_summary())
     
-    # Save to file
     output_file = stats.save_result(result)
     print(f"\n\nResults saved to: {output_file}")
 

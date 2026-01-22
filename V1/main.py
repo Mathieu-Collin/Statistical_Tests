@@ -4,7 +4,6 @@ This script demonstrates the complete statistical analysis pipeline for
 comparing door-to-needle times between two hospitals.
 """
 
-import os
 from datetime import datetime
 from pathlib import Path
 from src.data_generator import generate_both_hospital_datasets
@@ -145,12 +144,10 @@ def main():
     print("\nRunning statistical analysis pipeline...")
     result = run_statistical_pipeline(expanded_1, expanded_2)
     
-    # Save results to file
     print("\nSaving results to file...")
     results_file = save_results(result, len(expanded_1), len(expanded_2))
     print(f"Results saved to: {results_file}")
     
-    # Display results
     print("\n")
     formatted_output = format_results(result, len(expanded_1), len(expanded_2))
     print(formatted_output)

@@ -195,9 +195,9 @@ def run_statistical_pipeline(
     """Run complete statistical analysis pipeline on two hospital datasets.
 
     Pipeline steps:
-    1. Perform Shapiro-Wilk test on both datasets
-    2. If both datasets are normal (p > alpha), perform t-test
-    3. Otherwise, perform Wilcoxon rank-sum test
+    1. Perform Shapiro-Wilk test on both datasets to check normality
+    2. If both datasets are normal (p > alpha), perform parametric t-test
+    3. Otherwise, perform non-parametric Wilcoxon rank-sum test
 
     Parameters
     ----------
@@ -213,6 +213,11 @@ def run_statistical_pipeline(
     PipelineResult
         Complete results including normality tests and comparison test.
 
+    Notes
+    -----
+    The choice between parametric and non-parametric tests is automatic
+    based on the normality assessment of both datasets.
+
     Examples
     --------
     >>> data1 = np.random.normal(100, 10, 100)
@@ -223,18 +228,14 @@ def run_statistical_pipeline(
     >>> result.shapiro_hospital_1.is_normal
     True
     """
-    # Step 1: Perform Shapiro-Wilk tests
     shapiro_1 = shapiro_wilk_test(data_hospital_1, alpha=alpha)
     shapiro_2 = shapiro_wilk_test(data_hospital_2, alpha=alpha)
     
-    # Step 2: Decide which comparison test to use
     if shapiro_1.is_normal and shapiro_2.is_normal:
-        # Both datasets are normal -> use t-test
-        test_type = 't-test'
+        test_type: Literal['t-test', 'wilcoxon'] = 't-test'
         test_result = perform_t_test(data_hospital_1, data_hospital_2)
     else:
-        # At least one dataset is not normal -> use Wilcoxon
-        test_type = 'wilcoxon'
+        test_type: Literal['t-test', 'wilcoxon'] = 'wilcoxon'
         test_result = perform_wilcoxon_test(data_hospital_1, data_hospital_2)
     
     return PipelineResult(

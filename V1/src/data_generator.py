@@ -102,6 +102,11 @@ def generate_both_hospital_datasets(
         Two DataFrames: (df_hospital_1, df_hospital_2), each with columns
         'door_to_needle' and 'n'.
 
+    Notes
+    -----
+    Uses different random states for each hospital to ensure distinct datasets.
+    If random_state is None, both datasets will be fully random.
+
     Examples
     --------
     >>> df1, df2 = generate_both_hospital_datasets(n_rows=10, random_state=42)
@@ -117,7 +122,6 @@ def generate_both_hospital_datasets(
         random_state=random_state
     )
     
-    # Use different random state for second hospital if provided
     random_state_2 = random_state + 1 if random_state is not None else None
     
     df_hospital_2 = generate_hospital_dataset(

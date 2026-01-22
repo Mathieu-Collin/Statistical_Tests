@@ -34,6 +34,11 @@ def expand_dataset(df: pd.DataFrame) -> np.ndarray:
     TypeError
         If input is not a pandas DataFrame.
 
+    Notes
+    -----
+    The expansion creates a flat array where each door_to_needle value
+    appears exactly 'n' times, allowing for proper statistical analysis.
+
     Examples
     --------
     >>> df = pd.DataFrame({'door_to_needle': [30, 45, 60], 'n': [2, 3, 1]})
@@ -53,7 +58,6 @@ def expand_dataset(df: pd.DataFrame) -> np.ndarray:
             f"Found columns: {set(df.columns)}"
         )
     
-    # Expand each door_to_needle value by its frequency
     expanded_data = []
     for _, row in df.iterrows():
         door_to_needle_value = row['door_to_needle']
